@@ -172,3 +172,27 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+__pycache__/append_or_create_csv.cpython-38.pyc
+__pycache__/data_update.cpython-38.pyc
+__pycache__/download_data_bulk.cpython-38.pyc
+__pycache__/download_data.cpython-38.pyc
+__pycache__/find_missing_dates.cpython-38.pyc
+__pycache__/make_plot.cpython-38.pyc
+__pycache__/str2datetime.cpython-38.pyc
+__pycache__/symbol2name.cpython-38.pyc
+__pycache__/train_new_model.cpython-38.pyc
+data/AAPL.csv
+data/BNB-USD.csv
+data/BTC-USD.csv
+data/CAT.csv
+data/CL=F.csv
+data/ETH-USD.csv
+data/GC=F.csv
+data/GOOGL.csv
+data/HD.csv
+data/JNJ.csv
+data/JPM.csv
+data/NG=F.csv
+data/RB=F.csv
+data/tickername.csv
+data/XRP-USD.csv
