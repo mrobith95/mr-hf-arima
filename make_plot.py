@@ -115,7 +115,7 @@ def make_plot(stock):
         go.Scatter(
         x=next_tanggal, y=lowerl,
         mode='lines',
-        name='prediction lower',
+        name='Prediction lower',
         showlegend=False, # remove from legend
         line=dict(color='gray', width=0.75),
         ))
@@ -123,7 +123,7 @@ def make_plot(stock):
     fig.add_trace(go.Scatter(
         x=next_tanggal, y=upperl,
         mode='lines',
-        name='prediction upper',
+        name='Prediction upper',
         fill='tonexty',  # Fill to the trace below (y2)
         fillcolor='rgba(128, 128, 128, 0.15)',  # Grey with transparency
         showlegend=False, # remove from legend
