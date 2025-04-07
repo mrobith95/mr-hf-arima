@@ -1,4 +1,7 @@
 data/
+download_data_bulk.py
+playground.py
+train_new_model.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
