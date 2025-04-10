@@ -176,7 +176,6 @@ data/
 
 #
 to do.txt
-data/
 download_data_bulk.py
 playground.py
 train_new_model.py
