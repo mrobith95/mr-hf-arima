@@ -2,15 +2,36 @@ import gradio as gr
 from make_plot import make_plot
 from data_update import data_update
 
-def grafik_lilin(display_name):
+def grafik_lilin(display_name, pi_1, pi_2):
     ## check validity of inputs
     if display_name is None or display_name == '---':
         raise gr.Error('Unrecognized input. Only choose 1 option on the dropdown.', duration=5)
+    
+    ## check for pi_1 value
+    if pi_1 is None or pi_1 < 1 or pi_1 > 99:
+        raise gr.Error('Use valid value for PI input (between 1 to 99).', duration=5)
+
+    # check for pi_2
+    if pi_2 == 0: # set to None if pi_2 is entered as 0
+        pi_2 = None 
+    if pi_2 is None:
+        pass
+    elif pi_2 < 1 or pi_2 > 99:
+        raise gr.Error('Use valid value for optional PI input (between 1 to 99).', duration=5)
+
+    ## switch between pi_1 and pi_2 if pi_2 < pi_1
+    if pi_2 is not None and pi_2 < pi_1:
+        pi_1, pi_2 = pi_2, pi_1
+
+    ## if pi_1 and pi_2 is the same, set pi_2 to None
+    if pi_2 is not None and pi_2 == pi_1:
+        pi_2 = None
 
     # Convert display name to ticker symbol first
     stock = key2val_dropdown(display_name)
     data_update(stock)
-    return make_plot(stock)
+    fig, ini_pred = make_plot(stock, pi_1, pi_2)
+    return fig, ini_pred
 
 ## define function to map keys to values
 def key2val_dropdown(chosen):
@@ -73,13 +94,21 @@ with gr.Blocks() as demo:
         """
     )
 
-    symbol_choice = gr.Dropdown(isi_dropdown, label='Available Tickers', info="Choose 1 from the following list.")
+    with gr.Row():
+        symbol_choice = gr.Dropdown(isi_dropdown, label='Available Tickers', info="Choose 1 from the following list.")
+        pi_1 = gr.Number(label="Prediction Interval (in %)", info="Enter value between 1 and 99 for Prediction Interval.",
+                              value=95)
+        pi_2 = gr.Number(label="more Prediction Interval (in %, optional)", info="Enter value between 1 and 99 for more Prediction Interval. 0 is treated as not using more PI.",
+                         value = 0)
+
     submit_button = gr.Button("Submit", variant='primary')
     plot_result = gr.Plot(label='candlestick-chart', format='png')
+    pred_dict = gr.Dataframe(label='prediction-table')
     gr.Markdown(
         """
         ## How it works
         1. Choose 1 of available tickers.
+        2. Set at least 1 prediction interval.
         2. Click Submit
         3. Wait for the chart to appear (especially the first chart). 
         4. Move cursor to the right side of plot to get detailed info on predictions.
@@ -91,7 +120,7 @@ with gr.Blocks() as demo:
 
     # # display chart only after submit button is clicked
     submit_button.click(fn=grafik_lilin,
-                        inputs=symbol_choice,
-                        outputs=plot_result)
+                        inputs=[symbol_choice,pi_1,pi_2],
+                        outputs=[plot_result, pred_dict])
 
 demo.launch()
