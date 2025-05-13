@@ -48,6 +48,11 @@ def make_plot(stock, pi_1, pi_2):
     ## find missing dates
     missing_dates, ada_minggu = find_missing_dates(datanya)
 
+    ## batas data untuk gambar
+    maksimum = max(datanya['High'])
+    atas_g = 2*maksimum
+    bawa_g = 0
+
     ## define fig
     fig = go.Figure(data=[go.Candlestick(x=datanya['Date'],
                     open = datanya['Open'],
@@ -100,8 +105,8 @@ def make_plot(stock, pi_1, pi_2):
     # plot insample prediction
     fig.add_trace(
     go.Scatter(
-        x=tanggalnya[lower_in>0],  # Your x-axis data
-        y=mean_insample[lower_in>0],  # Your y-axis data
+        x=tanggalnya[(lower_in>bawa_g) & (upper_in<atas_g)],  # Your x-axis data
+        y=mean_insample[(lower_in>bawa_g) & (upper_in<atas_g)],  # Your y-axis data
         mode='lines',      # 'lines', 'markers', or 'lines+markers'
         name=f'Prediction',  # Legend entry
         showlegend=False, # remove from legend
@@ -122,7 +127,8 @@ def make_plot(stock, pi_1, pi_2):
     # plot conf interval
     fig.add_trace(
         go.Scatter(
-        x=tanggalnya[lower_in>0], y=lower_in[lower_in>0],
+        x=tanggalnya[(lower_in>bawa_g) & (upper_in<atas_g)],
+        y=lower_in[(lower_in>bawa_g) & (upper_in<atas_g)],
         mode='lines',
         name=pi_1str+' CI',
         showlegend=False, # remove from legend
@@ -131,7 +137,8 @@ def make_plot(stock, pi_1, pi_2):
         ))
     
     fig.add_trace(go.Scatter(
-        x=tanggalnya[lower_in>0], y=upper_in[lower_in>0],
+        x=tanggalnya[(lower_in>bawa_g) & (upper_in<atas_g)],
+        y=upper_in[(lower_in>bawa_g) & (upper_in<atas_g)],
         mode='lines',
         name=pi_1str+' CI',
         fill='tonexty',  # Fill to the trace below (y2)
@@ -177,7 +184,8 @@ def make_plot(stock, pi_1, pi_2):
         # plot conf interval
         fig.add_trace(
             go.Scatter(
-            x=tanggalnya[lower_in>0], y=lower_in2[lower_in>0],
+            x=tanggalnya[(lower_in2>bawa_g) & (upper_in2<atas_g)],
+            y=lower_in2[(lower_in2>bawa_g) & (upper_in2<atas_g)],
             mode='lines',
             name=pi_2str+' CI',
             showlegend=False, # remove from legend
@@ -186,7 +194,8 @@ def make_plot(stock, pi_1, pi_2):
             ))
         
         fig.add_trace(go.Scatter(
-            x=tanggalnya[lower_in>0], y=upper_in2[lower_in>0],
+            x=tanggalnya[(lower_in2>bawa_g) & (upper_in2<atas_g)],
+            y=upper_in2[(lower_in2>bawa_g) & (upper_in2<atas_g)],
             mode='lines',
             name=pi_2str+' CI',
             fill='tonexty',  # Fill to the trace below (y2)
